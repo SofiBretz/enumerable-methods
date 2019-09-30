@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 module Enumerable
+
   # my_each
   def my_each
 
-    for i in (0...length).each do |i|
-      yield self[i]
+    for i in 0...self.length
+        yield self[i]
     end
     # Analysis:
     # Self represent the current object, returns the elements of the array
@@ -15,8 +16,8 @@ module Enumerable
   # my_each_with_index
   def my_each_with_index
 
-    for i in (0...length).each do |i|
-      yield self[i], i
+    for i in 0...self.length
+        yield self[i], i
     end
   end
 
@@ -59,7 +60,7 @@ def my_any?
        end
 
     return select_arr.length > 0
-   end
+end
 
     #my_none?
     def my_none?
@@ -100,6 +101,13 @@ def my_any?
 
             return select_arr.length
         end
-        
-    
     end
+
+
+    #to test
+array = [1,2,3,4]
+#begin my_each 1 working
+array.each { |x| puts x +1}
+puts ''
+array.my_each { |x| puts x +1}
+#end
