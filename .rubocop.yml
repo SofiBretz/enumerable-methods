@@ -12,6 +12,9 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Include: ["app/controllers/*"]
   Max: 1000
+Metrics/ModuleLength:
+  Include: ["app/controllers/*"]
+  Max: 1000
 Metrics/AbcSize:
   Include: ["app/controllers/*"]
   Max: 30

@@ -33,7 +33,8 @@ module Enumerable
   end
 
   # my_all?
-  def my_all?(pattern = nil)
+  def my_all?
+    pattern = nil
     # all: The method returns true if ALL elements are true (or empty array).
 
     if block_given?
@@ -51,7 +52,8 @@ module Enumerable
   end
 
   # my_any?
-  def my_any?(arg = nil)
+  def my_any?
+    arg = nil
     # any: The method returns true if AT LEAST one element is true (or non empty array).
 
     if block_given?
@@ -69,7 +71,8 @@ module Enumerable
   end
 
   # my_none?
-  def my_none?(pattern = nil)
+  def my_none?
+    pattern = nil
     # none: The method returns true if NO elements are true (or empty array).
 
     if block_given?
@@ -117,7 +120,8 @@ module Enumerable
   end
 
   # my_inject
-  def my_inject(*args)
+  def my_inject
+    *args
     arr = to_a.dup
     if args[0].nil?
       memo = arr.shift
