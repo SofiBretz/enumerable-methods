@@ -33,6 +33,8 @@ module Enumerable
   end
 
   # my_all?
+  # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
+
   def my_all?
     pattern = nil
     # all: The method returns true if ALL elements are true (or empty array).
@@ -120,8 +122,7 @@ module Enumerable
   end
 
   # my_inject
-  def my_inject
-    *args
+  def my_inject(*args)
     arr = to_a.dup
     if args[0].nil?
       memo = arr.shift
@@ -153,6 +154,7 @@ module Enumerable
   end
 end
 
+# rubocop:enable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
 # Tests:
 arr = [1, 3, 5, 9, 7]
 

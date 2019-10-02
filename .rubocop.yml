@@ -5,6 +5,12 @@ AllCops:
     - "config/**/*"
     - "Guardfile"
     - "Rakefile"
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - Berksfile
+    - recipes/basic.rb
+    - attributes/*.rb
+    - 'path/to/excluded/file.rb'
   DisplayCopNames: true
 
 Metrics/LineLength:
