@@ -38,7 +38,7 @@ module Enumerable
     # all: The method returns true if ALL elements are true (or empty array).
 
     my_each { |x| return false unless yield(x) }
-    return true
+    true
   end
 
   # my_any?
@@ -46,7 +46,7 @@ module Enumerable
     # any: The method returns true if AT LEAST one element is true (or non empty array).
 
     my_each { |x| return true if yield(x) }
-    return false
+    false
   end
 
   # my_none?
@@ -58,86 +58,79 @@ module Enumerable
   end
 
   # my_count
-  def my_count(x = nil)
+  def my_count(items = nil)
+    count = 0
     # count: The count method takes an enumerable collection and counts how many elements match the given criteria.
 
-    return size if !block_given? && x.nil?
-
-    unless block_given?
-      if !x.nil?
-        c = 0
-        n = 0
-        while c < size
-          n += 1 
-          if self[c] == x
-          c += 1
-        end
-
-        return n
-      else
-        return size
-      end
-    end
-
-    c = 0
-    n = 0
-    while c < size
-      n += 1 if yield(self[c])
-      c += 1
-    end
-
-    return n
-  end
-
-  # my_map
-  def my_map(proc = nil)
-    return to_enum(:my_map) unless block_given?
-
-    new_arr = []
-    my_each do |p|
-      new_arr << if !proc.nil?
-                   proc.call(p)
-                 else
-                   yield(p)
-                 end
-    end
-    new_arr
-  end
-
-  # my_inject
-  def my_inject(*args)
-    arr = to_a.dup
-    if args[0].nil?
-      memo = arr.shift
-    elsif args[1].nil? && !block_given?
-      symbol = args[0]
-      memo = arr.shift
-    elsif args[1].nil? && block_given?
-      memo = args[0]
+    if block_given?
+      my_each { |x| count += 1 if yield(x) == true }
+    elsif items.nil?
+      my_each { count += 1 }
     else
-      memo = args[0]
-      symbol = args[1]
+      my_each { |x| count += 1 if x == items }
+    end
+    count
     end
 
-    arr[0..-1].my_each do |elem|
-      memo = if symbol
-               memo.send(symbol, elem)
-             else
-               yield(memo, elem)
-             end
-    end
-    memo
+  c = 0
+  n = 0
+  while c < size
+    n += 1 if yield(self[c])
+    c += 1
   end
 
-  def multiply_els(arr)
-    result = arr.my_inject do |mul, num|
-      mul * num
-    end
-    result
+  return n
   end
+
+# my_map
+def my_map(proc = nil)
+  return to_enum(:my_map) unless block_given?
+
+  new_arr = []
+  my_each do |p|
+    new_arr << if !proc.nil?
+                 proc.call(p)
+               else
+                 yield(p)
+               end
+  end
+  new_arr
 end
 
-# rubocop:enable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
+# my_inject
+def my_inject(*args)
+  arr = to_a.dup
+  if args[0].nil?
+    memo = arr.shift
+  elsif args[1].nil? && !block_given?
+    symbol = args[0]
+    memo = arr.shift
+  elsif args[1].nil? && block_given?
+    memo = args[0]
+  else
+    memo = args[0]
+    symbol = args[1]
+  end
+
+  arr[0..-1].my_each do |elem|
+    memo = if symbol
+             memo.send(symbol, elem)
+           else
+             yield(memo, elem)
+           end
+  end
+  memo
+end
+
+def multiply_els(arr)
+  result = arr.my_inject do |mul, num|
+    mul * num
+  end
+  result
+end
+end 
+
+# rubocop:enable
 # Tests:
 arr = [1, 3, 5, 9, 7]
 # # my_each
