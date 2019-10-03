@@ -33,77 +33,60 @@ module Enumerable
   end
 
   # my_all?
-  # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
 
   def my_all?
-    pattern = nil
     # all: The method returns true if ALL elements are true (or empty array).
 
-    if block_given?
-      my_each { |i| return false unless yield(i) }
-    elsif pattern.class == Class
-      my_each { |i| return false unless i.class == pattern }
-    elsif pattern.class == Regexp
-      my_each { |i| return false unless (i =~ pattern).is_a? Integer }
-    elsif pattern.nil?
-      my_each { |i| return false unless i }
-    else
-      my_each { |i| return false unless i == pattern }
-    end
-    true
+    my_each { |x| return false unless yield(x) }
+    return true
   end
 
   # my_any?
   def my_any?
-    arg = nil
     # any: The method returns true if AT LEAST one element is true (or non empty array).
 
-    if block_given?
-      my_each { |i| return true if yield(i) }
-    elsif arg.class == Class
-      my_each { |i| return true if i.class == arg }
-    elsif arg.class == Regexp
-      my_each { |i| return true if (i =~ arg).is_a? Integer }
-    elsif arg.nil?
-      my_each { |i| return true if i }
-    else
-      my_each { |i| return true if i == arg }
-    end
-    false
+    my_each { |x| return true if yield(x) }
+    return false
   end
 
   # my_none?
   def my_none?
-    pattern = nil
     # none: The method returns true if NO elements are true (or empty array).
 
-    if block_given?
-      my_each { |i| return false if yield(i) }
-    elsif pattern.class == Class
-      my_each { |i| return false if i.class == pattern }
-    elsif pattern.class == Regexp
-      my_each { |i| return false if (i =~ pattern).is_a? Integer }
-    elsif pattern.nil?
-      my_each { |i| return false if i }
-    else
-      my_each { |i| return false if i == pattern }
-    end
+    my_each { |x| return false if yield(x) }
     true
   end
 
   # my_count
-  def my_count(item = nil)
-    count = 0
+  def my_count(x = nil)
     # count: The count method takes an enumerable collection and counts how many elements match the given criteria.
 
-    if block_given?
-      my_each { |i| count += 1 if yield(i) == true }
-    elsif item.nil?
-      my_each { count += 1 }
-    else
-      my_each { |i| count += 1 if i == item }
+    return size if !block_given? && x.nil?
+
+    unless block_given?
+      if !x.nil?
+        c = 0
+        n = 0
+        while c < size
+          n += 1 
+          if self[c] == x
+          c += 1
+        end
+
+        return n
+      else
+        return size
+      end
     end
-    count
+
+    c = 0
+    n = 0
+    while c < size
+      n += 1 if yield(self[c])
+      c += 1
+    end
+
+    return n
   end
 
   # my_map
@@ -146,7 +129,7 @@ module Enumerable
     memo
   end
 
-  def multiply_else(arr)
+  def multiply_els(arr)
     result = arr.my_inject do |mul, num|
       mul * num
     end
@@ -157,22 +140,20 @@ end
 # rubocop:enable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
 # Tests:
 arr = [1, 3, 5, 9, 7]
-
-# my_each
-arr.my_each { |element| puts element }
-
+# # my_each
+# arr.my_each { |element| puts element }
+#
 # my_each_with_index
-arr.my_each_with_index { |element, index| puts "#{index} -> #{element}" }
-
+# arr.my_each_with_index { |element, index| puts "#{index} -> #{element}" }
+#
 # my_select
-puts(arr.my_select { |element| element > 5 })
-
+# puts(arr.my_select { |element| element > 5 })
+#
 # my_all?
-puts(arr.my_all? { |element| element < 10 })
-
+# puts(arr.my_all? { |element| element < 10 })
+#
 # my_any?
-puts(arr.my_any? { |element| element == 1 })
-
+# puts(arr.my_any? { |element| element == 1 })
 # my_none?
 puts(arr.my_none? { |element| element == 10 })
 
@@ -183,8 +164,8 @@ puts arr.my_count
 # my_inject
 puts(arr.my_inject { |sum, element| sum + element })
 
-# multiply_else([2,4,5])
-puts multiply_else([2, 4, 5])
+# multiply_els([2,4,5])
+puts arr.multiply_els([2, 4, 5])
 
 # my_map (proc)
 proc = proc { |element| element * 10 }

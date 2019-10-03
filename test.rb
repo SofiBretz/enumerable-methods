@@ -28,8 +28,8 @@ puts arr.my_count
 # my_inject
 puts(arr.my_inject { |sum, element| sum + element })
 
-# multiply_else([2,4,5])
-puts multiply_else([2, 4, 5])
+# multiply_els([2,4,5])
+puts arr.multiply_els([2, 4, 5])
 
 # my_map (proc)
 proc = proc { |element| element * 10 }
