@@ -34,26 +34,56 @@ module Enumerable
 
   # my_all?
 
-  def my_all?
+  def my_all?(par = nil)
     # all: The method returns true if ALL elements are true (or empty array).
 
-    my_each { |x| return false unless yield(x) }
+    if block_given?
+      my_each { |x| return false unless yield(x) }
+    elsif par.class == Class
+      my_each { |x| return false unless x.class == par }
+    elsif par.class == Regexp
+      my_each { |x| return false unless x =~ par }
+    elsif par.nil?
+      my_each { |x| return false unless x }
+    else
+      my_each { |x| return false unless x == par }
+    end
     true
   end
 
   # my_any?
-  def my_any?
+  def my_any?(par = nil)
     # any: The method returns true if AT LEAST one element is true (or non empty array).
 
-    my_each { |x| return true if yield(x) }
+    if block_given?
+      my_each { |x| return true if yield(x) }
+    elsif par.class == Class
+      my_each { |x| return true if x.class == par }
+    elsif par.class == Regexp
+      my_each { |x| return true if x =~ par }
+    elsif par.nil?
+      my_each { |x| return true if x }
+    else
+      my_each { |x| return true if x == par }
+    end
     false
   end
 
   # my_none?
-  def my_none?
+  def my_none?(par = nil)
     # none: The method returns true if NO elements are true (or empty array).
 
-    my_each { |x| return false if yield(x) }
+    if block_given?
+      my_each { |x| return false if yield(x) }
+    elsif par.class == Class
+      my_each { |x| return false if x.class == par }
+    elsif par.class == Regexp
+      my_each { |x| return false if x =~ par }
+    elsif par.nil?
+      my_each { |x| return false if x }
+    else
+      my_each { |x| return false if x == par }
+    end
     true
   end
 
